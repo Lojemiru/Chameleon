@@ -20,6 +20,7 @@
     {"id":{"name":"sLookUp","path":"sprites/sLookUp/sLookUp.yy",},"order":1,},
     {"id":{"name":"oRButton","path":"objects/oRButton/oRButton.yy",},"order":6,},
     {"id":{"name":"oColorRamp","path":"objects/oColorRamp/oColorRamp.yy",},"order":8,},
+    {"id":{"name":"oExportButton","path":"objects/oExportButton/oExportButton.yy",},"order":9,},
     {"id":{"name":"sTest","path":"sprites/sTest/sTest.yy",},"order":0,},
     {"id":{"name":"sColorRamp","path":"sprites/sColorRamp/sColorRamp.yy",},"order":7,},
     {"id":{"name":"GMLScripts","path":"scripts/GMLScripts/GMLScripts.yy",},"order":2,},

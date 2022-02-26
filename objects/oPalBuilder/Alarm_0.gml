@@ -13,3 +13,5 @@ oRButton.set_event(next_sprite);
 oRemoveButton.label = "Remove";
 oRemoveButton.set_event(remove_sprite);
 
+oExportButton.label = "Export";
+oExportButton.set_event(export_pal);

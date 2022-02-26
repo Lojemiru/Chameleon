@@ -170,6 +170,7 @@ function TruePalette(_x, _y) : ScreenElement(_x, _y, 8, 8) constructor {
 		surface_set_target(renderSurface);
 	}
 	
+	// TODO: surface here can be lost which screws up everything else! needs a a regen mechanism.
 	add_colors_from_sprite = function(_index) {
 		//ds_list_add(sprites, new AdvancedSprite(_index));
 		var newSpr = new AdvancedSprite(_index);

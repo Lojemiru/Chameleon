@@ -27,7 +27,7 @@ add_sprite = function() {
 		}
 		catch (e) {
 			// do nothing for now lol, just git gud
-			show_debug_message("something went horribly wrong");
+			show_message("something went horribly wrong");
 		}
 	}
 }
@@ -57,3 +57,15 @@ remove_sprite = function() {
 
 // The currently selected sprite
 spriteIndex = 0;
+
+export_pal = function() {
+	var fname = get_save_filename("png file|*.png", "");
+	if (fname != "" && surface_exists(palette.renderSurface)) {
+		surface_save(palette.renderSurface, fname);
+		show_message("Palette sprite exported.");
+	}
+	else {
+		// do nothing for now lol, just git gud
+		show_message("Something went wrong trying to save. You either didn't supply a name or there is no palette to save!");
+	}
+}
