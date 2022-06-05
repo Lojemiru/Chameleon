@@ -59,7 +59,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"sLookUp","path":"sprites/sLookUp/sLookUp.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "sLookUp",
     "tags": [],
     "resourceType": "GMSequence",

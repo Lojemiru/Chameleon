@@ -12,6 +12,7 @@ if (instance_exists(target)) {
 }
 
 if (palette != noone) {
+	palette.y -= (mouse_wheel_down() - mouse_wheel_up()) * 8;
 	if (mouse_check_button_pressed(mb_left)) {
 		palette.do_click(mouse_x, mouse_y);
 	}

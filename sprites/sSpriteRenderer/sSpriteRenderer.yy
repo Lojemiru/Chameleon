@@ -59,7 +59,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"sSpriteRenderer","path":"sprites/sSpriteRenderer/sSpriteRenderer.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "sSpriteRenderer",
     "tags": [],
     "resourceType": "GMSequence",

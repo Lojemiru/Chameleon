@@ -59,7 +59,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"sColorRamp","path":"sprites/sColorRamp/sColorRamp.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "sColorRamp",
     "tags": [],
     "resourceType": "GMSequence",

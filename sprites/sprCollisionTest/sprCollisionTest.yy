@@ -59,7 +59,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"sprCollisionTest","path":"sprites/sprCollisionTest/sprCollisionTest.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "sprCollisionTest",
     "tags": [],
     "resourceType": "GMSequence",
