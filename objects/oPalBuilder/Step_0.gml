@@ -12,7 +12,14 @@ if (instance_exists(target)) {
 }
 
 if (palette != noone) {
-	palette.y -= (mouse_wheel_down() - mouse_wheel_up()) * 8;
+	palette.step();
+	var mw = mouse_wheel_down() - mouse_wheel_up();
+	
+	if (mw != 0) {
+		palette.do_mwheel(mw, mouse_x, mouse_y);
+		
+	}
+	
 	if (mouse_check_button_pressed(mb_left)) {
 		palette.do_click(mouse_x, mouse_y);
 	}
@@ -22,6 +29,13 @@ if (palette != noone) {
 			palette.release_click(mouse_x, mouse_y);
 		}
 	}
+	
+	if (mouse_check_button_pressed(mb_middle)) {
+		palette.do_middle_click(mouse_x, mouse_y);
+	}
+	
+	if (keyboard_check_pressed(vk_left)) prev_sprite();
+	else if (keyboard_check_pressed(vk_right)) next_sprite();
 }
 
 // Shift + key keybinds

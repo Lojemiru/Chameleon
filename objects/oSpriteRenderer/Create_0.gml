@@ -1,6 +1,6 @@
 
-drawX = 0;
-drawY = 0;
+drawX = 1;
+drawY = 1;
 scale = 1;
 
 lastMouseX = mouse_x;

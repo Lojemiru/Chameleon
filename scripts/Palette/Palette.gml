@@ -1,4 +1,6 @@
 global.selectedElement = noone;
+global.mix = 1;
+global.compression = 0;
 
 function Palette(_x, _y, _sprite) constructor {
 	static drawSize = 8;
@@ -142,31 +144,27 @@ function Palette(_x, _y, _sprite) constructor {
 function TruePalette(_x, _y) : ScreenElement(_x, _y, 8, 8) constructor {
 	x = _x;
 	y = _y;
+	ystart = y;
+	depth = other.depth;
 	
 	sprites = array_create(0);
 	colors = array_create(0);
 	oldColors = array_create(0);
-	surfScale = 256;
-	renderSurface = surface_create(surfScale, surfScale);
+	surfSize = 256;
+	renderSurface = surface_create(surfSize, surfSize);
 	selected = 0;
 	
 	var rampDist = floor(w * 2.5);
+	yOffset = 40;
+	picker = color_picker_create(x + 18, y + yOffset, 176, 8, 2, c_black);
+	hex = new TextBox(x + rampDist + 40, y - 7 + yOffset, "", 6);
 	
-	r = new ColorRamp(x + rampDist, y, $0000ff);
-	g = new ColorRamp(x + rampDist, y + 9, $00ff00);
-	b = new ColorRamp(x + rampDist, y + 18, $ff0000);
-	hex = new TextBox(x + rampDist, y + 30, "", 6);
 	
 	var i = 0;
-	subElements[i++] = r;
-	subElements[i++] = g;
-	subElements[i++] = b;
 	subElements[i++] = hex;
 	
 	static target_surface = function() {
-		if (!surface_exists(renderSurface)) {
-			renderSurface = surface_create(surfScale, surfScale);
-		}
+		if (!surface_exists(renderSurface) || surface_get_width(renderSurface) != surfSize) renderSurface = surface_create(surfSize, surfSize);
 		surface_set_target(renderSurface);
 	}
 	
@@ -185,8 +183,8 @@ function TruePalette(_x, _y) : ScreenElement(_x, _y, 8, 8) constructor {
 				collision = -1;
 			
 			repeat (len) {
-				if (colors[j].r == col.r && colors[j].g == col.g) {
-					if (colors[j].b == col.b) {
+				if (oldColors[j].r == col.r && oldColors[j].g == col.g) {
+					if (oldColors[j].b == col.b) {
 						skip = true;
 						break;
 					}
@@ -204,53 +202,105 @@ function TruePalette(_x, _y) : ScreenElement(_x, _y, 8, 8) constructor {
 				var col = colors[len],
 				var old = oldColors[len];
 				target_surface();
-				draw_rectangle_color(old.r, old.g, old.r, old.g, col.rgb, col.rgb, col.rgb, col.rgb, false);
+				var _x = floor(old.r * (surfSize / 256));
+				var _y = floor(old.g * (surfSize / 256));
+				draw_rectangle_color(_x, _y, _x, _y, col.rgb, col.rgb, col.rgb, col.rgb, false);
 				surface_reset_target();
 			}
 			++i;
 		}
-	}
-	
-	on_update_click = function(_x, _y) {
-		selected = clamp(floor(_y / w), 0, array_length(colors) - 1);
-		r.val = colors[selected].r;
-		g.val = colors[selected].g;
-		b.val = colors[selected].b;
+		
+		color_picker_set(picker, colors[selected].rgb);
 		hex.text = dec_to_hex(colors[selected].r, 2) + dec_to_hex(colors[selected].g, 2) + dec_to_hex(colors[selected].b, 2);
 	}
 	
-	update_color_rgb = function() {
-		var col = colors[selected],
-			old = oldColors[selected];
-		col.r = r.val;
-		col.g = g.val;
-		col.b = b.val;
-		col.regenerate();
-		
-		hex.text = dec_to_hex(r.val, 2) + dec_to_hex(g.val, 2) + dec_to_hex(b.val, 2);
-		
+	rerender_surface = function() {
+		var i = 0;
 		target_surface();
-		draw_rectangle_color(old.r, old.g, old.r, old.g, col.rgb, col.rgb, col.rgb, col.rgb, false);
+		repeat (array_length(oldColors)) {
+			var col = colors[i],
+				old = oldColors[i];
+				
+			var _x = floor(old.r * (surfSize / 256));
+			var _y = floor(old.g * (surfSize / 256));
+			draw_rectangle_color(_x, _y, _x, _y, col.rgb, col.rgb, col.rgb, col.rgb, false);
+			++i;
+		}
 		surface_reset_target();
+	}
+	
+	on_update_click = function(_x, _y) {
+		var tmp = colors[selected],
+			tmpOld = oldColors[selected],
+			tmpSel = selected;
+		
+		selected = clamp(floor(_y / w), 0, array_length(colors) - 1);
+		
+		// Swap color positions
+		if (keyboard_check(vk_shift)) {
+			colors[tmpSel] = colors[selected];
+			colors[selected] = tmp;
+			oldColors[tmpSel] = oldColors[selected];
+			oldColors[selected] = tmpOld;
+		}
+		
+		color_picker_set(picker, colors[selected].rgb);
+		hex.text = dec_to_hex(colors[selected].r, 2) + dec_to_hex(colors[selected].g, 2) + dec_to_hex(colors[selected].b, 2);
+	}
+	
+	// Reset color
+	on_middle_click = function(_x, _y) {
+		selected = clamp(floor(_y / w), 0, array_length(colors) - 1);
+		
+		color_picker_set(picker, oldColors[selected].rgb);
+	}
+	
+	do_mwheel = function(_mw, _x, _y) {
+		if ((_x >= x - 9 && _x <= x + w + 8)) {
+		   if (_mw > 0 && y + (w * array_length(colors)) > room_height / 2) y -= 8;
+		   else if (_mw < 0 && y < room_height / 2) y += 8;
+		}
+	}
+	
+	step = function() {
+		surfSize = global.compression;
+		
+		var col = colors[selected],
+			old = oldColors[selected],
+			prev = colors[selected].rgb;
+			
+		col.rgb = color_picker_get(picker);
+		col.degenerate();
+		
+		if (col.rgb != prev) {
+			target_surface();
+			var _x = floor(old.r * (surfSize / 256));
+			var _y = floor(old.g * (surfSize / 256));
+			draw_rectangle_color(_x, _y, _x, _y, col.rgb, col.rgb, col.rgb, col.rgb, false);
+			surface_reset_target();
+			hex.text = dec_to_hex(colors[selected].r, 2) + dec_to_hex(colors[selected].g, 2) + dec_to_hex(colors[selected].b, 2);
+		}
+		
+		if (!surface_exists(renderSurface) || surface_get_width(renderSurface) != surfSize) {
+			rerender_surface();
+		}
 	}
 	
 	update_color_hex = function() {
 		var col = colors[selected],
 			old = oldColors[selected];
 		
-		
-		
 		col.r = hex_to_dec(string_copy(hex.text, 1, 2));
 		col.g = hex_to_dec(string_copy(hex.text, 3, 2));
 		col.b = hex_to_dec(string_copy(hex.text, 5, 2));
 		col.regenerate();
 		
-		r.val = col.r;
-		g.val = col.g;
-		b.val = col.b;
+		color_picker_set(picker, colors[selected].rgb);
 		
 		target_surface();
-		draw_rectangle_color(old.r, old.g, old.r, old.g, col.rgb, col.rgb, col.rgb, col.rgb, false);
+		var _x = floor(old.r * (surfSize / 256));
+		var _y = floor(old.g * (surfSize / 256));
+		draw_rectangle_color(_x, _y, _x, _y, col.rgb, col.rgb, col.rgb, col.rgb, false);
 		surface_reset_target();
 	}
 	
@@ -275,7 +325,12 @@ function TruePalette(_x, _y) : ScreenElement(_x, _y, 8, 8) constructor {
 		draw_set_halign(fa_left);
 		draw_set_valign(fa_top);
 		
-		draw_text(x - w + 1, y - w - 2, string(oldColors[selected].r) + "," + string(oldColors[selected].g) + "," + string(oldColors[selected].b));
+		var rampDist = floor(w * 2.5);
+		draw_text(x + rampDist, ystart - 40 + yOffset, "Original RGB: " + string(oldColors[selected].r) + "," + string(oldColors[selected].g) + "," + string(oldColors[selected].b));
+		draw_text(x + rampDist, ystart - 31 + yOffset, "Original Hex: " + dec_to_hex(oldColors[selected].r, 2) + dec_to_hex(oldColors[selected].g, 2) + dec_to_hex(oldColors[selected].b, 2));
+		
+		draw_text(x + rampDist, ystart - 16 + yOffset, "RGB: " + string(colors[selected].r) + "," + string(colors[selected].g) + "," + string(colors[selected].b));
+		draw_text(x + rampDist, ystart - 7 + yOffset, "Hex:");
 	}
 }
 
@@ -300,7 +355,6 @@ function TextBox(_x, _y, _text, _limit) : ScreenElement(_x, _y, 128, 8) construc
 			text = string_upper(text);
 			parent.update_color_hex();
 		}
-		
 	}
 	
 	on_release_click = function(_x, _y) {
@@ -311,10 +365,15 @@ function TextBox(_x, _y, _text, _limit) : ScreenElement(_x, _y, 128, 8) construc
 		draw_set_halign(fa_left);
 		draw_set_valign(fa_top);
 		
+		if (global.selectedElement == self) draw_set_color(c_yellow);
+		else draw_set_color(c_white);
+		
 		draw_text(x, y, text);
+		draw_set_color(c_white);
 	}
 }
 
+// Sprite + array of its colors.
 function AdvancedSprite(_index) constructor {
 	image = _index;
 	colors = array_create(0);
@@ -370,17 +429,14 @@ function AdvancedSprite(_index) constructor {
 		}
 		if (skip) continue;
 		
-		show_debug_message(string(r) + ", " + string(g) + ", " + string(b));
-		// Add as new Color to colors array, then increment
-		colors[array_length(colors)] = new Color(r, g, b);
+		// Push value to array
+		array_push(colors, new Color(r, g, b));
 	}
 		
 	// Delete buffer
 	buffer_delete(colorBuffer);
 	
 	#endregion
-	
-	
 }
 
 // Data container for color values.
@@ -394,6 +450,12 @@ function Color(_r, _g, _b) constructor {
 	// Call after modifying rgb values to update draw color
 	static regenerate = function() {
 		rgb = make_color_rgb(r, g, b);
+	}
+	
+	static degenerate = function() {
+		r = color_get_red(rgb);
+		g = color_get_green(rgb);
+		b = color_get_blue(rgb);
 	}
 	
 	static set = function(_r = r, _g = g, _b = b) {
@@ -424,6 +486,18 @@ function ScreenElement(_x, _y, _w, _h) constructor {
 			}
 		}
 	}
+	
+	do_mwheel = function(_mw, _x, _y) {
+		
+	}
+	
+	static do_middle_click = function(_x, _y) {
+		if (point_in_rectangle(_x, _y, x, y, x + w, y + h)) {
+			on_middle_click(_x - x, _y - y);
+		}
+	}
+	
+	on_middle_click = function(_x, _y) { }
 	
 	static update_click = function(_x, _y) {
 		if (global.selectedElement == self) {
@@ -474,6 +548,10 @@ function ScreenElement(_x, _y, _w, _h) constructor {
 	}
 	
 	on_draw = function() {
+		
+	}
+	
+	step = function() {
 		
 	}
 }

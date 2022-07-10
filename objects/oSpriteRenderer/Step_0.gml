@@ -1,9 +1,17 @@
 if (instance_exists(oPalBuilder) && ds_list_size(oPalBuilder.sprites) > 0) {
 
-	scale += (mouse_wheel_up() - mouse_wheel_down()) / 2;
-	scale = clamp(scale, 0.5, 10);
+	if (mouse_x <= bbox_right && mouse_x >= bbox_left && mouse_y >= bbox_top && mouse_y <= bbox_bottom) {
+		scale += (mouse_wheel_up() - mouse_wheel_down());
+		scale = clamp(scale, 1, 10);
 
-	if (!moving && mouse_x <= bbox_right && mouse_x >= bbox_left && mouse_y >= bbox_top && mouse_y <= bbox_bottom && keyboard_check(vk_space) && mouse_check_button_pressed(mb_left)) moving = true;
+		if (mouse_check_button_pressed(mb_middle)) {
+			drawX = 1;
+			drawY = 1;
+			scale = 1;
+		}
+
+		if (!moving && mouse_check_button_pressed(mb_left)) moving = true;
+	}
 
 	if (moving) {
 		var w = sprite_get_width(oPalBuilder.sprites[| oPalBuilder.spriteIndex]),
@@ -12,12 +20,9 @@ if (instance_exists(oPalBuilder) && ds_list_size(oPalBuilder.sprites) > 0) {
 		drawX += (mouse_x - lastMouseX);
 		drawY += (mouse_y - lastMouseY);
 		
-		if (mouse_check_button_pressed(mb_middle)) {
-			drawX = 0;
-			drawY = 0;
-		}
+		
 	
-		moving = keyboard_check(vk_space) && mouse_check_button(mb_left);
+		moving = mouse_check_button(mb_left);
 	}
 
 	lastMouseX = mouse_x;
