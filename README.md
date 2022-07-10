@@ -13,7 +13,7 @@ This project is newly released as of 7/10/2022. The shader itself should be rock
 Want to help out? Here's what I'm aiming to do next with this tool:
 
 - Backport shader and associated scripts to GameMaker: Studio 1.4.
-- Add imagery to documentation.
+- Add a drawbacks/Q&A wiki page.
 - Add some form of safety check/warning on palette overlaps during compression.
 
 ## Attribution
