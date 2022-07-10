@@ -18,6 +18,8 @@ Want to help out? Here's what I'm aiming to do next with this tool:
 
 ## Attribution
 
+The sprites used in the Palette Builder wiki page were made by the incredibly talented and very cool [@shmegleskimo](https://twitter.com/shmegleskimo). Go give him a follow!
+
 This project makes use of some GMLScripts for color conversion. [Check out their license here.](GMLscripts.com/license)
 
 This project also makes use of the CC0-1.0 licensed [GMS2-Color-Picker by THEASK-CN.](https://github.com/THEASK-CN/GMS2-Color-Picker)
