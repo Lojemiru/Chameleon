@@ -15,7 +15,7 @@
     {"id":{"name":"Shader2","path":"shaders/Shader2/Shader2.yy",},"order":1,},
     {"id":{"name":"oPalBuilder","path":"objects/oPalBuilder/oPalBuilder.yy",},"order":1,},
     {"id":{"name":"oLoadButton","path":"objects/oLoadButton/oLoadButton.yy",},"order":14,},
-    {"id":{"name":"shChameleon","path":"shaders/shChameleon/shChameleon.yy",},"order":0,},
+    {"id":{"name":"shChameleon","path":"shaders/shChameleon/shChameleon.yy",},"order":1,},
     {"id":{"name":"oSaveButton","path":"objects/oSaveButton/oSaveButton.yy",},"order":13,},
     {"id":{"name":"sprCollisionTest","path":"sprites/sprCollisionTest/sprCollisionTest.yy",},"order":6,},
     {"id":{"name":"sLookUp2","path":"sprites/sLookUp2/sLookUp2.yy",},"order":3,},
@@ -73,6 +73,7 @@
     {"folderPath":"folders/Notes.yy","order":13,"resourceVersion":"1.0","name":"Notes","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/Extensions.yy","order":14,"resourceVersion":"1.0","name":"Extensions","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/Extensions/Color Picker.yy","order":0,"resourceVersion":"1.0","name":"Color Picker","tags":[],"resourceType":"GMFolder",},
+    {"folderPath":"folders/Extensions/Chameleon.yy","order":1,"resourceVersion":"1.0","name":"Chameleon","tags":[],"resourceType":"GMFolder",},
   ],
   "AudioGroups": [
     {"targets":-1,"resourceVersion":"1.3","name":"audiogroup_default","resourceType":"GMAudioGroup",},
