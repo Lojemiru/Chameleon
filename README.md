@@ -5,7 +5,7 @@ This project is newly released as of 7/10/2022. The shader itself should be rock
 
 ## Usage and demo
 
-[Check out the wiki](// TODO: Actually link!) for usage and implementation details.
+[Check out the wiki](https://github.com/Lojemiru/Chameleon/wiki) for usage and implementation details.
 
 [Check out the latest release](https://github.com/Lojemiru/Chameleon/releases/latest) for both the palette construction tool, which also serves as a great way to try out the palette swapper.
 
