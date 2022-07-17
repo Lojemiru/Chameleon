@@ -108,6 +108,8 @@ load_pal = function() {
 				color_picker_set(palette.picker, palette.colors[palette.selected].rgb);
 				sprites = ds_list_create();
 				spriteIndex = 0;
+				
+				palette.rerender_surface();
 			}
 		}
 	}
