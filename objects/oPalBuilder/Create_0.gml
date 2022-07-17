@@ -88,7 +88,7 @@ save_pal = function() {
 
 load_pal = function() {
 	
-	if (palette != noone) if (show_question("WARNING: Loading a palette will wipe all unsaved work! Do you wish to proceed?")) return;
+	if (palette != noone) if (!show_question("WARNING: Loading a palette will wipe all unsaved work! Do you wish to proceed?")) return;
 	
 	var fname = get_open_filename("json file|*.json", "");
 	if (fname != "") {
