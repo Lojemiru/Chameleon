@@ -1,3 +1,9 @@
+# Deprecation
+
+I am moving on from GameMaker in general. I will provide support for this library as best possible if people still express interest in it, but I will not be actively using it and will be unlikely to add new features to Chameleon unless necessary for a probable backport.
+
+Pull requests and issues will still be addressed, but you may get better long-term mileage with a fork.
+
 # Chameleon
 A fast, reliable, free, and open-source palette swapper for GameMaker Studio 2.
 
